@@ -1,0 +1,30 @@
+{
+  "name": "spreadsheet-generator",
+  "version": "1.0.0",
+  "description": "An application that generates a structured and filtered spreadsheet report from a different one.",
+  "main": "main.js",
+  "scripts": {
+    "test": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solorzke/spreadsheet-generator.git"
+  },
+  "keywords": [
+    "spreadsheet",
+    "generator",
+    "solorzke",
+    "xlsx",
+    "node.js",
+    "electron"
+  ],
+  "author": "Kevin Solorzano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/solorzke/spreadsheet-generator/issues"
+  },
+  "homepage": "https://github.com/solorzke/spreadsheet-generator#readme",
+  "dependencies": {
+    "electron": "^7.1.10"
+  }
+}
