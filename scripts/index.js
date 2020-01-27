@@ -26,108 +26,48 @@ const addSum = (parent, children) => {
 	}
 };
 
-const calculatePercents = (parent, children) => {
-	const cells = [
-		{ cell: 'DG', a: 'DD4', b: 'DC4' },
-		{ cell: 'DR', a: 'DQ4', b: 'AL4' },
-		{ cell: 'DW', a: 'DU4', b: 'DV4' },
-		{ cell: 'DZ', a: 'DX4', b: 'DY4' }
-	];
-	for (let i = 0; i < cells.length; i++) {
-		parent[2][cells[i]['cell']] = pare;
-	}
-	//DG: DD4/DC4
-	//DR: DQ4/AL4
-	//DW: DU4/DV4
-	//DZ: DX4/DY4
-};
+const calculatePercents = (parent, children) => {};
 
 const headings = (file_path) => {
-	return excelToJson({
+	const data = excelToJson({
 		sourceFile: file_path,
-		sheets: [ 'DLAR' ],
 		columnToKey: {
-			B: 'B',
-			L: 'L',
-			N: 'N',
-			O: 'O',
-			P: 'P',
-			AI: 'AI',
-			AJ: 'AJ',
-			AK: 'AK',
-			AL: 'AL',
-			DG: 'DG',
-			DR: 'DR',
-			DW: 'DW',
-			DY: 'DY',
-			DZ: 'DZ'
+			C: 'C', //Name
+			D: 'D', //Address
+			I: 'I', //Door Type
+			J: 'J', //Qualified Activations
+			O: 'O', //3rd Payments
+			P: 'P', //3rd Payment %
+			S: 'S', //4th Payments
+			T: 'T', //4th Payment %
+			AG: 'AG' //4th Month
 		}
 	});
+	return data[Object.keys(data)[0]];
 };
 
 const result = (file_path) => {
-	return excelToJson({
+	const data = excelToJson({
 		sourceFile: file_path,
-		rows: 5,
-		sheets: [ 'DLAR' ],
+		rows: 1,
 		columnToKey: {
-			L: 'L',
-			N: 'N',
-			O: 'O',
-			P: 'P',
-			W: 'W',
-			AI: 'AI',
-			AJ: 'AJ',
-			AK: 'AK',
-			AL: 'AL',
-			DG: 'DG',
-			DR: 'DR',
-			DW: 'DW',
-			DY: 'DY',
-			DZ: 'DZ'
+			C: 'C', //Name
+			D: 'D', //Address
+			I: 'I', //Door Type
+			J: 'J', //Qualified Activations
+			O: 'O', //3rd Payments
+			P: 'P', //3rd Payment %
+			S: 'S', //4th Payments
+			T: 'T', //4th Payment %
+			AG: 'AG' //4th Month
 		}
 	});
+	return data[Object.keys(data)[0]];
 };
 
 /* Retrieve the heading row from JSON data */
 const getHeadings = (json) => {
-	let list = [];
-	for (let i = 0; i < 4; i++) {
-		if (i != 0 && i != 3) {
-			json[i]['DG'] = (json[i]['DG'] * 100).toFixed(2) + ' %';
-			json[i]['DR'] = (json[i]['DR'] * 100).toFixed(2) + ' %';
-			json[i]['DW'] = (json[i]['DW'] * 100).toFixed(2) + ' %';
-			json[i]['DZ'] = (json[i]['DZ'] * 100).toFixed(2) + ' %';
-
-			if (i == 2) {
-				json[i]['AI'] = 0;
-				json[i]['AJ'] = 0;
-				json[i]['AK'] = 0;
-				json[i]['AL'] = 0;
-				json[i]['DY'] = 0;
-			}
-		}
-		list.push(json[i]);
-	}
-	delete list[3]['B'];
-	return list;
-};
-
-/* Return a array of employee names from the JSON data */
-const listEmployees = (json) => {
-	let list = [];
-	for (let i = 0; i < json.length; i++) {
-		if (json[i].hasOwnProperty('W')) {
-			let name = JSON.stringify(json[i]['W']).trim();
-			name = name.slice(1, name.length - 1);
-			if (!list.includes(name)) {
-				list.push(name);
-			} else {
-				continue;
-			}
-		}
-	}
-	return list;
+	return json[0];
 };
 
 /* Return a array of company names based on the selected employee names from the JSON data */
@@ -215,7 +155,10 @@ const generateExcel = (file_path, json) => {
 	});
 };
 
-// const file_path = '/Users/solorzke/Downloads/prepaid_daily_pulse_naws(1).xlsx';
+const file_path = '/Users/solorzke/Downloads/Percentage by Door.xls';
+const headers = headings(file_path);
+const results = result(file_path);
+console.log(getHeadings(headers));
 // let data = [];
 // const headerRows = headings(file_path);
 // const resultRows = result(file_path);
