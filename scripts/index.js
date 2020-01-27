@@ -12,21 +12,36 @@ const parse_path = (file_path) => {
 };
 
 /* Add the sum of each column to it */
-const addSum = (parent, children) => {
-	const cells = [ 'AI', 'AJ', 'AK', 'AL', 'DY' ];
-	for (let i = 0; i < cells.length; i++) {
-		parent[2][cells[i]] += [].concat
+const addSum = (children) => {
+	const cells = [ [ 'J', 'O', 'S' ] ];
+	let totalRow = {
+		C: 'Total',
+		J: 0,
+		O: 0,
+		S: 0,
+		P: 0,
+		T: 0,
+		AG: 0
+	};
+
+	/* Calculate the total sums for these cell categories */
+	for (let i = 0; i < cells[0].length; i++) {
+		totalRow[cells[0][i]] += [].concat
 			.apply(
 				[],
 				children.map((item) => {
-					return item[cells[i]];
+					return item[cells[0][i]];
 				})
 			)
 			.reduce((a, b) => a + b, 0);
 	}
+	totalRow['P'] = totalRow['O'] / totalRow['J'] * 100;
+	totalRow['T'] = totalRow['S'] / totalRow['J'] * 100;
+	totalRow['AG'] = (totalRow['P'] - totalRow['T']).toFixed(2) + ' %';
+	totalRow['P'] = totalRow['P'].toFixed(2) + ' %';
+	totalRow['T'] = totalRow['T'].toFixed(2) + ' %';
+	return totalRow;
 };
-
-const calculatePercents = (parent, children) => {};
 
 const headings = (file_path) => {
 	const data = excelToJson({
@@ -70,48 +85,37 @@ const getHeadings = (json) => {
 	return json[0];
 };
 
-/* Return a array of company names based on the selected employee names from the JSON data */
-const listCompanies = (employees, json) => {
+/* Return a array of company names from the JSON data */
+const listCompanies = (json) => {
 	let list = [];
-	for (let i = 0; i < json.length; i++) {
-		if (json[i].hasOwnProperty('L') && json[i].hasOwnProperty('W')) {
-			//Condition is skipped if there is no employee name
-			let employee = JSON.stringify(json[i]['W']).trim();
-			employee = employee.slice(1, employee.length - 1);
-			if (employees.includes(employee)) {
-				let company = JSON.stringify(json[i]['L']).trim();
-				company = company.slice(1, company.length - 1);
-				if (!list.includes(company)) {
-					list.push(company);
-				} else {
-					continue;
-				}
-			} else continue;
+	for (let i = 1; i < json.length; i++) {
+		if (json[i].hasOwnProperty('C')) {
+			//Condition is skipped if there is no Company name
+			let company = JSON.stringify(json[i]['C']).trim();
+			company = company.slice(1, company.length - 1);
+			if (!list.includes(company)) {
+				list.push(company);
+			} else {
+				continue;
+			}
 		}
 	}
 	return list;
 };
 
 /* Find the record of the company name via JSON. Return as obj */
-const findRecord = (employees, companyName, json) => {
+const findRecord = (companyName, json) => {
 	let data = [];
 	for (let i = 0; i < json.length; i++) {
-		if (json[i].hasOwnProperty('L') && json[i].hasOwnProperty('W')) {
-			let employee = JSON.stringify(json[i]['W']).trim();
-			employee = employee.slice(1, employee.length - 1);
-
-			if (employees.includes(employee)) {
-				let record = JSON.stringify(json[i]['L']).trim();
-				//Remove double quotes surrounding the name
-				record = record.slice(1, record.length - 1);
-				if (record === companyName) {
-					json[i]['DG'] = (json[i]['DG'] * 100).toFixed(2) + ' %';
-					json[i]['DR'] = (json[i]['DR'] * 100).toFixed(2) + ' %';
-					json[i]['DW'] = (json[i]['DW'] * 100).toFixed(2) + ' %';
-					json[i]['DZ'] = (json[i]['DZ'] * 100).toFixed(2) + ' %';
-					delete json[i]['W']; //erase employee name not needed
-					data.push(json[i]);
-				}
+		if (json[i].hasOwnProperty('C')) {
+			let record = JSON.stringify(json[i]['C']).trim();
+			//Remove double quotes surrounding the name
+			record = record.slice(1, record.length - 1);
+			if (record === companyName) {
+				json[i]['P'] = (json[i]['P'] * 100).toFixed(2) + ' %';
+				json[i]['T'] = (json[i]['T'] * 100).toFixed(2) + ' %';
+				json[i]['AG'] = (json[i]['AG'] * 100).toFixed(2) + ' %';
+				data.push(json[i]);
 			}
 		}
 	}
@@ -128,22 +132,17 @@ const generateExcel = (file_path, json) => {
 	};
 
 	const workbook = new Excel.stream.xlsx.WorkbookWriter(options);
-	const worksheet = workbook.addWorksheet('DLAR');
+	const worksheet = workbook.addWorksheet('report');
 	worksheet.columns = [
-		{ header: '', key: 'B' },
-		{ header: '', key: 'L' },
-		{ header: '', key: 'N' },
+		{ header: '', key: 'C' },
+		{ header: '', key: 'D' },
+		{ header: '', key: 'I' },
+		{ header: '', key: 'J' },
 		{ header: '', key: 'O' },
 		{ header: '', key: 'P' },
-		{ header: '', key: 'AI' },
-		{ header: '', key: 'AJ' },
-		{ header: '', key: 'AK' },
-		{ header: '', key: 'AL' },
-		{ header: '', key: 'DG' },
-		{ header: '', key: 'DR' },
-		{ header: '', key: 'DW' },
-		{ header: '', key: 'DY' },
-		{ header: '', key: 'DZ' }
+		{ header: '', key: 'S' },
+		{ header: '', key: 'T' },
+		{ header: '', key: 'AG' }
 	];
 
 	for (let i = 0; i < json.length; i++) {
@@ -155,10 +154,13 @@ const generateExcel = (file_path, json) => {
 	});
 };
 
-const file_path = '/Users/solorzke/Downloads/Percentage by Door.xls';
-const headers = headings(file_path);
-const results = result(file_path);
-console.log(getHeadings(headers));
+// const file_path = '/Users/solorzke/Downloads/Percentage by Door.xls';
+// const headers = headings(file_path);
+// const results = result(file_path);
+// const re = findRecord('Nb Network Solutions', results);
+// const total = addSum(re);
+// generateExcel(parse_path(file_path), [ headers[0], ...re, total ]);
+
 // let data = [];
 // const headerRows = headings(file_path);
 // const resultRows = result(file_path);
