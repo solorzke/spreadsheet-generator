@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Report Generator</title>
+        <meta name="description" content="Report Generator used soley for Marco Solorzano">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>window.$ = window.jQuery = require('jquery');</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="bg-light">
+            <!--Container Section-->
+            <div class="container d-flex flex-column about py-5">
+                <!--Upload File Section-->
+                <div id="upload-view" class="row justify-content-center">
+                    <div class="col-md-12">
+                        <h2 class="pb-5 text-left">Step 1: Select File</h2>
+                        <form method="#" action="#" enctype="multipart/form-data">
+                            <label>Upload File</label>
+                            <input id="filename" type="file" name="file">
+                            <input type="hidden" name="action" value="upload">
+                            <br>
+                            <button style="width: 50%;" class="my-3 btn btn-primary btn-sm px-5" id="upload" onclick="return false;">Upload</button>
+                        </form>
+                    </div>
+                </div>
+                <!--Select Employees List Section-->
+                <div id="emp-view" class="row justify-content-center py-5 invisible">
+                    <!--Select Drop Down List for Emp Names-->
+                    <div class="col-md-8">
+                        <h2 class="pb-5 text-left">Step 2: Select Employees</h2>
+                        <label>Choose Employee(s)</label>
+                        <select id="employees">
+                        </select>
+                        <br>
+                        <button class="my-2 px-5 btn btn-secondary btn-sm" id="emp-back-btn" onclick="return false;">Go Back</button>
+                        <button class="my-2 px-5 btn btn-primary btn-sm" id="emp-btn" onclick="return false;">Confirm</button>
+                    </div>
+                    <!--Section of Employee Names Selected-->
+                    <div class="col-md-4">
+                        <h4>Employee:</h4>
+                        <hr id="emp-list">
+                    </div>
+                </div>
+                <!--Select Companies List Section-->      
+                <div class="row pt-5 invisible" id="cp-view">
+                    <!--Select Drop Down List for Co. Names-->           
+                    <div class="col-md-8">
+                        <h2 class="pb-5 text-left">Step 3: Select Companies</h2>
+                        <label>Choose Company(s)</label>
+                        <select id="companies" required>
+                        </select>
+                        <br>
+                        <button class="my-2 px-5 btn btn-secondary btn-sm" id="cp-back-btn" onclick="return false;">Go Back</button>
+                        <a href="./finish.html" class="my-2 px-5 btn btn-success btn-sm" id="generate">Generate</a>
+                        <hr> 
+                    </div>
+                    <!--Section of Co. Names Selected-->
+                    <div class="col-md-4">
+                        <h4>Companies:</h4>
+                        <hr id="co-list">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="../scripts/index.js"></script>
+    <script type="text/javascript" src="../scripts/query.js"></script>
+</html>

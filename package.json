@@ -4,7 +4,7 @@
   "description": "An application that generates a structured and filtered spreadsheet report from a different one.",
   "main": "main.js",
   "scripts": {
-    "test": "electron ."
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
