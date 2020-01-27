@@ -6,6 +6,7 @@ let resultRows;
 let selected = []; //selected[1] => companies
 let file_path;
 let data = [];
+let companies = [];
 
 $('#cp-view').slideUp(0);
 
@@ -31,7 +32,7 @@ $(document).ready(() => {
 			headerRows = headings(file_path);
 			resultRows = result(file_path);
 			$('#companies').empty().append(new Option('', '')); //Clears the options list in select
-			const companies = listCompanies(resultRows).sort();
+			companies = listCompanies(resultRows).sort();
 			for (let i = 0; i < companies.length; i++) {
 				$('#companies').append(new Option(companies[i], companies[i]));
 			}
@@ -79,19 +80,36 @@ $(document).ready(() => {
 		console.log('Generating report document based on the query data...');
 		const headers = getHeadings(headerRows);
 		// data = [ ...headers ];
-		for (let i = 0; i < selected.length; i++) {
-			const record = findRecord(selected[i], resultRows);
-			data = [ ...data, ...record ];
-		}
-		const totalRow = calculateTotal(data);
-		data = [ headers, ...data, totalRow ];
-		console.log('Finshed query...\nGenerating report...');
-		if (file_path && data) {
-			const new_path = parse_path(file_path);
-			generateExcel(new_path, data);
-			console.log('Report generated....');
+		if (selected.length !== 0) {
+			for (let i = 0; i < selected.length; i++) {
+				const record = findRecord(selected[i], resultRows);
+				data = [ ...data, ...record ];
+			}
+			const totalRow = calculateTotal(data);
+			data = [ headers, ...data, totalRow ];
+			console.log('Finshed query...\nGenerating report...');
+			if (file_path && data) {
+				const new_path = parse_path(file_path);
+				generateExcel(new_path, data);
+				console.log('Report generated....');
+			} else {
+				console.log('No file_path or data generated. Cant generate report');
+			}
 		} else {
-			console.log('No file_path or data generated. Cant generate report');
+			for (let i = 0; i < companies.length; i++) {
+				const record = findRecord(companies[i], resultRows);
+				data = [ ...data, ...record ];
+			}
+			const totalRow = calculateTotal(data);
+			data = [ headers, ...data, totalRow ];
+			console.log('Finshed query...\nGenerating report...');
+			if (file_path && data) {
+				const new_path = parse_path(file_path);
+				generateExcel(new_path, data);
+				console.log('Report generated....');
+			} else {
+				console.log('No file_path or data generated. Cant generate report');
+			}
 		}
 	});
 });

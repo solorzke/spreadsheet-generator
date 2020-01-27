@@ -155,8 +155,9 @@ const generateExcel = (file_path, json) => {
 };
 
 // const file_path = '/Users/solorzke/Downloads/Percentage by Door.xls';
-// const headers = headings(file_path);
+// // const headers = headings(file_path);
 // const results = result(file_path);
+// console.log(results.slice(1, results.length));
 // const re = findRecord('Nb Network Solutions', results);
 // const total = addSum(re);
 // generateExcel(parse_path(file_path), [ headers[0], ...re, total ]);
