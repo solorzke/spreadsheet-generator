@@ -12,7 +12,7 @@ const parse_path = (file_path) => {
 };
 
 /* Add the sum of each column to it */
-const addSum = (children) => {
+const calculateTotal = (children) => {
 	const cells = [ [ 'J', 'O', 'S' ] ];
 	let totalRow = {
 		C: 'Total',
